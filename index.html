@@ -16,17 +16,12 @@
     </head>
     <body>
         <div id="root">
-            <!-- 只有点击自身才触发，不能通过子元素冒泡触发 -->
-            <ul @click.self="handleUlClick">
-                <!-- .stop：阻止事件冒泡 -->
-                <li @click.stop="handleLiClick">111</li>
-                <li @click="handleLiClick">222</li>
-                <!-- 触发一次后解绑事件 -->
-                <li @click.once="handleLiClick">333</li>
-            </ul>
+            <!-- 对应的键值只有常用的，如 回车键 -->
+            <!-- 按下enter -->
+            <input type="text" @keyup.enter="handleKeyup">
 
-            <!-- .prevent：阻止默认行为 -->
-            <a href="http://www.baidu.com" @click.prevent="handlePage">跳转</a>
+            <!-- 如果需要指定按下 w 需要指定 keyCode -->
+            <input type="text" @keyup.87="handleW">
         </div>
 
         <script type="text/javascript">
@@ -35,17 +30,15 @@
                 data: {
                 },
                 methods: {
-                    handleUlClick() {
-                        console.log('ul')
+                    handleKeyup(ev) {
+                        console.log(ev)
+                        // 原生实现抬起回车
+                        // if (ev.keyCode === 13) {
+                        //     console.log('keyup')
+                        // }
                     },
-                    handleLiClick(e) {
-                        console.log('li')
-                        // 原生实现阻止冒泡
-                        // e.stopPropagation()
-                    },
-                    handlePage(e) {
-                        // 原生阻止默认行为
-                        // e.preventDefault()
+                    handleW(e) {
+                        console.log(e)
                     }
                 }
             })
