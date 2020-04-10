@@ -16,30 +16,44 @@
     </head>
     <body>
         <div id="root">
-            <!-- 对应的键值只有常用的，如 回车键 -->
-            <!-- 按下enter -->
-            <input type="text" @keyup.enter="handleKeyup">
+            <!-- 双向数据绑定 -->
+            <input type="text" v-model="text">
+            <div>{{ text }}</div>
+            <textarea v-model="text"></textarea>
+            <!-- 单选绑定 -->
+            <input type="checkbox" v-model="isChecked">记住用户名
 
-            <!-- 如果需要指定按下 w 需要指定 keyCode -->
-            <input type="text" @keyup.87="handleW">
+            <p>
+                你喜欢的运动？
+                <!--
+                     多选绑定 所有爱好都存在一个数组里，
+                     注意区分 value 值，value 是作为存在数组里的数据
+                 -->
+                <input type="checkbox" v-model="checkGroup" value="游泳">游泳
+                <input type="checkbox" v-model="checkGroup" value="滑冰">滑冰
+                <input type="checkbox" v-model="checkGroup" value="长跑">长跑
+            </p>
+
+            <p>
+                你最喜欢的编程语言？
+                <!--
+                     单选绑定 把勾选的赋值给一个变量，
+                     注意区分 value 值，value 是作为变量里的值
+                 -->
+                <input type="radio" v-model="picked" value="PHP">PHP
+                <input type="radio" v-model="picked" value="JavaScript">JavaScript
+                <input type="radio" v-model="picked" value="Java">Java
+            </p>
         </div>
 
         <script type="text/javascript">
             let vm = new Vue({
                 el: '#root',
                 data: {
-                },
-                methods: {
-                    handleKeyup(ev) {
-                        console.log(ev)
-                        // 原生实现抬起回车
-                        // if (ev.keyCode === 13) {
-                        //     console.log('keyup')
-                        // }
-                    },
-                    handleW(e) {
-                        console.log(e)
-                    }
+                    text: '',
+                    isChecked: false,
+                    checkGroup: [],
+                    picked: ''
                 }
             })
         </script>
