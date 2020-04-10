@@ -6,27 +6,42 @@
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
         <style>
             .pink {
-                color: pink;
+                background: pink;
             }
             .red {
-                color: red;
+                background: red;
             }
         </style>
     </head>
     <body>
         <div id="root">
-            <!-- 指令 -->
-            <div v-show="isShow">动态显示和隐藏</div>
-            <div v-if="isCreated">动态创建和删除</div>
+            <button @click="toggle">点我切换颜色</button>
+            <div :class="isActive ? 'red' : 'pink'">动态绑定class-三目写法</div>
+
+            <div :class="classList">动态绑定class-对象写法</div>
+            <div :class="classArr">动态绑定class-数组写法</div>
         </div>
 
         <script type="text/javascript">
             let vm = new Vue({
                 el: '#root',
                 data: {
-                    isShow: true,
-                    isCreated: true
+                    isActive: false,
+                    // 键对应的是 类名，值决定是否绑定这个类名，
+                    // 缺点：直接增加键值对的话，不会正常增加类名，因为没有绑定set和get
+                    classList: {
+                        a: true,
+                        b: true,
+                        c: false
+                    },
+                    // 数组存在的值 直接绑定到 class类名上
+                    classArr: ['a', 'b']
                 },
+                methods: {
+                    toggle() {
+                        this.isActive = !this.isActive
+                    }
+                }
             })
         </script>
     </body>
