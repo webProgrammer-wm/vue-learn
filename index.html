@@ -16,17 +16,10 @@
     </head>
     <body>
         <div id="root">
+            <input type="text" @input="search" v-model="content">
             <ul>
-                <!-- 列表渲染-数组 -->
-                <li v-for="(data, index) in dataList" :key="index">
+                <li v-for="data in dataList">
                     {{ data }}
-                </li>
-            </ul>
-
-            <ul>
-                <!-- 列表渲染-对象 -->
-                <li v-for="(v, k) in infos" :key="k">
-                    {{ k }} : {{ v }}
                 </li>
             </ul>
         </div>
@@ -35,10 +28,24 @@
             let vm = new Vue({
                 el: '#root',
                 data: {
-                    dataList: ['111', '222', '333'],
-                    infos: {
-                        name: 'jerry',
-                        age: 18
+                    content: '',
+                    baseList: ['111', '123', '222', '333'],
+                    dataList: ['111', '123', '222', '333']
+                },
+                methods: {
+                    search() {
+                        // 利用输入框的字符，过滤出包含字段的元素
+                        // filter过滤
+                        this.dataList = this.baseList.filter(item => {
+                            return item.indexOf(this.content) > -1
+                        })
+
+                        /*
+                            模糊搜索
+                            思路：1.让页面事先渲染 临时展示的数组，里面包含了所有内容
+                                 2.利用输入框的字符，过滤原始数组里符合条件的元素
+                                 3.返回给 临时数组
+                         */
                     }
                 }
             })
