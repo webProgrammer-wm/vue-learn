@@ -16,35 +16,33 @@
     </head>
     <body>
         <div id="root">
-            <button>点我切换颜色</button>
-            <div :style=`background:${isActive?'pink':'red'}`>动态绑定style-三目</div>
-            <div :style="styleObj">动态绑定style-对象写法</div>
-            <div :style="styleArr">动态绑定style-数组写法</div>
+            <div>购物车</div>
+            <button @click="add">增加商品</button>
+            <button @click="del">删除商品</button>
+            <div v-if="dataList.length">
+                <ul v-for="data in dataList">
+                    <li>{{ data }}</li>
+                </ul>
+            </div>
+            <div v-else>
+                你的购物车空空如也
+            </div>
         </div>
 
         <script type="text/javascript">
             let vm = new Vue({
                 el: '#root',
                 data: {
-                    isActive: true,
-                    // 对象绑定 style
-                    // 缺点：不能通过动态增加键值对来新增属性，因为没有绑定 set 和 get
-                    styleObj: {
-                        background: 'red',
-                        color: '#fff',
-                        fontSize: 14 + 'px',
-                        fontWeight: 'bold'
-                    },
-                    styleArr: [
-                      {
-                          background: 'pink',
-                          color: '#fff',
-                          fontSize: 14 + 'px',
-                          fontWeight: 'bold'
-                      }
-                    ]
+                    dataList: []
                 },
-                methods: {}
+                methods: {
+                    add() {
+                        this.dataList = ['土豆', '白菜', '方便面']
+                    },
+                    del() {
+                        this.dataList = []
+                    }
+                }
             })
         </script>
     </body>
