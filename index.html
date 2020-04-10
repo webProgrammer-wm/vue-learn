@@ -16,25 +16,36 @@
     </head>
     <body>
         <div id="root">
-            <!-- 不传参 -->
-            <button @click="handleClick">显示隐藏1</button>
-            <!-- 传参数 -->
-            <button @click="handleClick()">显示隐藏2</button>
-            <!-- 代码过于简单可以直接使用js表达式 -->
-            <button @click="isShow = !isShow">显示隐藏3</button>
+            <!-- 只有点击自身才触发，不能通过子元素冒泡触发 -->
+            <ul @click.self="handleUlClick">
+                <!-- .stop：阻止事件冒泡 -->
+                <li @click.stop="handleLiClick">111</li>
+                <li @click="handleLiClick">222</li>
+                <!-- 触发一次后解绑事件 -->
+                <li @click.once="handleLiClick">333</li>
+            </ul>
 
-            <div v-show="isShow">我是显示的吗</div>
+            <!-- .prevent：阻止默认行为 -->
+            <a href="http://www.baidu.com" @click.prevent="handlePage">跳转</a>
         </div>
 
         <script type="text/javascript">
             let vm = new Vue({
                 el: '#root',
                 data: {
-                    isShow: true
                 },
                 methods: {
-                    handleClick() {
-                        this.isShow = !this.isShow
+                    handleUlClick() {
+                        console.log('ul')
+                    },
+                    handleLiClick(e) {
+                        console.log('li')
+                        // 原生实现阻止冒泡
+                        // e.stopPropagation()
+                    },
+                    handlePage(e) {
+                        // 原生阻止默认行为
+                        // e.preventDefault()
                     }
                 }
             })
