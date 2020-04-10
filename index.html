@@ -15,24 +15,17 @@
     </head>
     <body>
         <div id="root">
-            <!-- 表达式 -->
-            {{ 10 + 20 }}
-            {{ 10 == '10' ? 'true' : 'false' }}
-
-            <!-- 插值 -->
-            {{ msg }}
-
             <!-- 指令 -->
-            <div v-html="testHTML"></div>
-
+            <div v-show="isShow">动态显示和隐藏</div>
+            <div v-if="isCreated">动态创建和删除</div>
         </div>
 
         <script type="text/javascript">
             let vm = new Vue({
                 el: '#root',
                 data: {
-                    msg: 'hello',
-                    testHTML: '<b>粗体</b>'
+                    isShow: true,
+                    isCreated: true
                 },
             })
         </script>
