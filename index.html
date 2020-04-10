@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <title></title>
@@ -16,36 +16,25 @@
     </head>
     <body>
         <div id="root">
-            <input type="text" @input="search" v-model="content">
-            <ul>
-                <li v-for="data in dataList">
-                    {{ data }}
-                </li>
-            </ul>
+            <!-- 不传参 -->
+            <button @click="handleClick">显示隐藏1</button>
+            <!-- 传参数 -->
+            <button @click="handleClick()">显示隐藏2</button>
+            <!-- 代码过于简单可以直接使用js表达式 -->
+            <button @click="isShow = !isShow">显示隐藏3</button>
+
+            <div v-show="isShow">我是显示的吗</div>
         </div>
 
         <script type="text/javascript">
             let vm = new Vue({
                 el: '#root',
                 data: {
-                    content: '',
-                    baseList: ['111', '123', '222', '333'],
-                    dataList: ['111', '123', '222', '333']
+                    isShow: true
                 },
                 methods: {
-                    search() {
-                        // 利用输入框的字符，过滤出包含字段的元素
-                        // filter过滤
-                        this.dataList = this.baseList.filter(item => {
-                            return item.indexOf(this.content) > -1
-                        })
-
-                        /*
-                            模糊搜索
-                            思路：1.让页面事先渲染 临时展示的数组，里面包含了所有内容
-                                 2.利用输入框的字符，过滤原始数组里符合条件的元素
-                                 3.返回给 临时数组
-                         */
+                    handleClick() {
+                        this.isShow = !this.isShow
                     }
                 }
             })
