@@ -16,31 +16,29 @@
     </head>
     <body>
         <div id="root">
-            <div>购物车</div>
-            <button @click="add">增加商品</button>
-            <button @click="del">删除商品</button>
-            <div v-if="dataList.length">
-                <ul v-for="data in dataList">
-                    <li>{{ data }}</li>
-                </ul>
-            </div>
-            <div v-else>
-                你的购物车空空如也
-            </div>
+            <ul>
+                <!-- 列表渲染-数组 -->
+                <li v-for="(data, index) in dataList" :key="index">
+                    {{ data }}
+                </li>
+            </ul>
+
+            <ul>
+                <!-- 列表渲染-对象 -->
+                <li v-for="(v, k) in infos" :key="k">
+                    {{ k }} : {{ v }}
+                </li>
+            </ul>
         </div>
 
         <script type="text/javascript">
             let vm = new Vue({
                 el: '#root',
                 data: {
-                    dataList: []
-                },
-                methods: {
-                    add() {
-                        this.dataList = ['土豆', '白菜', '方便面']
-                    },
-                    del() {
-                        this.dataList = []
+                    dataList: ['111', '222', '333'],
+                    infos: {
+                        name: 'jerry',
+                        age: 18
                     }
                 }
             })
