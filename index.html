@@ -16,43 +16,32 @@
   </head>
   <body>
     <div id="root">
-      <!-- 3.触发父组件的 toggle 方法 -->
-      <navbar @myevent="toggle"></navbar>
-      <!-- 通过 父组件的isShow 来控制自身的显示隐藏 -->
-      <sidebar v-show="isShow"></sidebar>
+      <input type="text" ref="mytext">
+      <button @click="handleAdd">add</button>
+
+      <child ref="mychild"></child>
     </div>
 
     <script type="text/javascript">
-      Vue.component('navbar', {
-        // 1.点击子组件的按钮，触发 handle 方法
+      // 子组件
+      Vue.component('child', {
         template:
           `
             <div>
-              <button @click="handle">click</button>
+              child
             </div>
           `
         ,
+        data() {
+          return {
+            childName: '我是子组件'
+          }
+        },
         methods: {
-          // 2.handle方法 触发了父组件的 myevent事件，该事件执行了 父组件的toggle方法
-          handle() {
-            this.$emit('myevent')
+          say(word) {
+            console.log('子组件的方法', word)
           }
         }
-      })
-
-      Vue.component('sidebar', {
-        template:
-          `
-            <div style="background: pink;width: 200px;">
-              <ul>
-                <li>11111</li>
-                <li>11111</li>
-                <li>11111</li>
-                <li>11111</li>
-              </ul>
-            </div>
-          `
-        ,
       })
 
       let vm = new Vue({
@@ -61,12 +50,19 @@
           isShow: true
         },
         methods: {
-          // 触发相反状态
-          toggle() {
-            this.isShow = !this.isShow
+          handleAdd() {
+            // 直接访问子组件的属性
+            console.log('111', this.$refs.mychild.childName)
+            // 直接访问子组件的方法、传值给子组件
+            console.log(this.$refs.mychild.say('孩子听话'))
           }
         }
       })
+
+      /*
+        1.ref放在标签上，拿到的是原生节点
+        2.ref放在组件上，拿到的是组件对象
+       */
     </script>
   </body>
 </html>
