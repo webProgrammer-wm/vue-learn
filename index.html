@@ -25,7 +25,11 @@
                     <input type="checkbox" v-model="checkGroup" :value="data" @change="isChecked">
                     商品名称：{{ data.name }}
                     价格：{{ data.price }}元
-                    数量：{{ data.number }}个
+                    数量：
+                    <button @click="del(data)">-</button>
+                        {{ data.number }}
+                    <button @click="add(data)">+</button>
+                    个
                 </li>
             </ul>
 
@@ -89,6 +93,16 @@
                         this.checkGroup.length === this.dataList.length
                           ? this.isCheckedAll = true
                           : this.isCheckedAll = false
+                    },
+
+                    del(item) {
+                        if (item.number === 1) return
+                        item.number -= 1
+                    },
+
+                    add(item) {
+                        if (item.number === 5) return
+                        item.number += 1
                     }
                 }
             })
