@@ -15,32 +15,34 @@
     </head>
     <body>
         <div id="root">
-            <input type="text" v-model="content">
-            <ul>
-                <li v-for="data in getSearchList">
-                    {{ data }}
-                </li>
-            </ul>
+            <nav-bar></nav-bar>
+            <nav-bar></nav-bar>
+            <nav-bar></nav-bar>
         </div>
 
         <script type="text/javascript">
+            // 1.全局定义组件（作用域隔离）
+            Vue.component('navBar', {
+                template:
+                  `<div style="background: pink;">
+                      <button @click="handleBack()">返回</button>
+                      navbar
+                      <button>主页</button>
+                   </div>`
+                ,
+                // 组件的方法
+                methods: {
+                    handleBack() {
+                        console.log(1)
+                    }
+                }
+
+            })
+
+
             let vm = new Vue({
                 el: '#root',
                 data: {
-                    // 输入的内容
-                    content: '',
-                    dataList: ['111', '123', '222', '333']
-                },
-                computed: {
-                    // 计算属性依赖的值发生改变，那么计算属性就会执行一遍
-                    // 因为输入的内容发生改变，所以计算属性会跟着执行一遍
-                    getSearchList() {
-                        /*
-                            如果 indexOf 检查的字符串长度为0，那么返回的就是0，这样的话，如果不输入搜索内容，那么会把原数组完整返回
-                            如果查询到了内容，就返回一个带有查询内容的新数组
-                         */
-                        return this.dataList.filter(item => item.indexOf(this.content) > -1)
-                    }
                 }
             })
         </script>
