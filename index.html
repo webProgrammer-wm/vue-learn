@@ -4,7 +4,6 @@
         <meta charset="utf-8">
         <title></title>
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <style>
             * {
                 list-style: none;
@@ -21,33 +20,44 @@
     </head>
     <body>
         <div id="root">
-            <button @click="getMovie">获取当前热映电影</button>
-            <ul>
-                <li v-for="data in dataList">
-                    <img :src="data.images.small" alt="图片加载失败">
-                    <h3>{{ data.title }}</h3>
-                </li>
-            </ul>
+            计算属性：{{ getName }}
+            普通方法：{{ getNameMethod() }}
+
+            <div>
+                另外一个地方
+                计算属性：{{ getName }}
+                普通方法：{{ getNameMethod() }}
+            </div>
         </div>
 
         <script type="text/javascript">
-
             let vm = new Vue({
                 el: '#root',
                 data: {
-                    dataList: []
+                    name: 'xiaoming'
+                },
+                // 计算属性
+                computed: {
+                    // 依赖的状态改变了，计算属性会重新计算一遍
+                    getName() {
+                        console.log('computed')
+                        return this.name.substring(0, 1).toUpperCase() + this.name.substring(1)
+                    }
                 },
                 methods: {
-                    getMovie() {
-                        axios.get('./api/movie.json').then(res => {
-                            console.log(res)
-                            // 自动包装 data 属性
-                            this.dataList = res.data.subjects
-                        }).catch(err => {
-                            console.log(err)
-                        })
+                    getNameMethod() {
+                        console.log('method')
+                        return this.name.substring(0, 1).toUpperCase() + this.name.substring(1)
                     }
                 }
+
+                /*
+                    计算属性相对方法性能更好
+                    以上的两个地方用到了计算属性和方法
+                    计算属性只被调用了一次，被计算过一次的话会缓存在内存中
+                    而方法被调用了两次
+
+                 */
             })
         </script>
     </body>
