@@ -19,91 +19,28 @@
     </head>
     <body>
         <div id="root">
-            <input type="checkbox" @change="checkedAll" v-model="isCheckedAll">全选
-            <ul>
-                <li v-for="data in dataList">
-                    <input type="checkbox" v-model="checkGroup" :value="data" @change="isChecked">
-                    商品名称：{{ data.name }}
-                    价格：{{ data.price }}元
-                    数量：
-                    <button @click="del(data)">-</button>
-                        {{ data.number }}
-                    <button @click="add(data)">+</button>
-                    个
-                </li>
-            </ul>
+            <!-- .lazy：当输入框失去焦点后再改变text的值 -->
+            <input type="text" v-model.lazy="text">
+            {{ text }}
 
-            <p>总金额：{{ getPrice() }} 元</p>
+            <input type="number" placeholder="请输入年龄" v-model.number="number">
+            {{ number }}
+
+            <!-- .trim：去除首尾空格 -->
+            <input type="text" v-model.trim="username">
+            -{{ username }}-
         </div>
 
         <script type="text/javascript">
             let vm = new Vue({
                 el: '#root',
                 data: {
-                    // 选中的商品列表
-                    checkGroup: [],
-                    dataList: [
-                        {
-                            name: '商品1',
-                            price: 10,
-                            number: 1,
-                            id: '1'
-                        },
-                        {
-                            name: '商品2',
-                            price: 20,
-                            number: 2,
-                            id: '2'
-                        },
-                        {
-                            name: '商品3',
-                            price: 30,
-                            number: 3,
-                            id: '3'
-                        }
-                    ],
-                    isCheckedAll: false
+                    text: '',
+                    number: '',
+                    username: ''
                 },
                 methods: {
-                    getPrice() {
-                        // 函数计算中的状态改变后，函数会自动执行一遍
-                        let totalPrice = 0
 
-                        // for (let i = 0, length = this.checkGroup.length; i < length; i ++) {
-                        //     price += this.checkGroup[i].price * this.checkGroup[i].number
-                        // }
-
-                        this.checkGroup.forEach(item => {
-                            totalPrice += item.price * item.number
-                        })
-
-                        return totalPrice
-                    },
-
-                    checkedAll() {
-                        // 如果全选按钮为选中，那么把 商品列表赋值给 选中的商品列表
-                        if (this.isCheckedAll) this.checkGroup = this.dataList
-                        // 否则清空商品列表
-                        else this.checkGroup = []
-                    },
-
-                    isChecked() {
-                        // 如果勾选的商品个数 等于 商品总个数，代表全勾选了，勾上全选按钮
-                        // 否则认为 不全选
-                        this.checkGroup.length === this.dataList.length
-                          ? this.isCheckedAll = true
-                          : this.isCheckedAll = false
-                    },
-
-                    del(item) {
-                        if (item.number === 1) return
-                        item.number -= 1
-                    },
-
-                    add(item) {
-                        if (item.number === 5) return
-                        item.number += 1
-                    }
                 }
             })
         </script>
