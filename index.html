@@ -16,43 +16,54 @@
   </head>
   <body>
     <div id="root">
-      父组件
-      <!-- 子组件传值给父组件靠事件 -->
-      <!-- $event可以接收子组件传来的值，这是固定写法 -->
-      <child @my-event="handle($event)"></child>
+      <!-- 3.触发父组件的 toggle 方法 -->
+      <navbar @myevent="toggle"></navbar>
+      <!-- 通过 父组件的isShow 来控制自身的显示隐藏 -->
+      <sidebar v-show="isShow"></sidebar>
     </div>
 
     <script type="text/javascript">
-      Vue.component('child', {
+      Vue.component('navbar', {
+        // 1.点击子组件的按钮，触发 handle 方法
         template:
           `
             <div>
-              child组件
-              <button @click="payMoney()">click</button>
+              <button @click="handle">click</button>
             </div>
           `
         ,
-        data() {
-          return {
-            status: '子组件的状态'
-          }
-        },
         methods: {
-
-          payMoney() {
-            // 分发事件，触发父组件的方法。触发了 20 行代码的 handle函数
-            this.$emit('my-event', 100)
+          // 2.handle方法 触发了父组件的 myevent事件，该事件执行了 父组件的toggle方法
+          handle() {
+            this.$emit('myevent')
           }
         }
+      })
+
+      Vue.component('sidebar', {
+        template:
+          `
+            <div style="background: pink;width: 200px;">
+              <ul>
+                <li>11111</li>
+                <li>11111</li>
+                <li>11111</li>
+                <li>11111</li>
+              </ul>
+            </div>
+          `
+        ,
       })
 
       let vm = new Vue({
         el: '#root',
         data: {
+          isShow: true
         },
         methods: {
-          handle(num) {
-            console.log('父组件收到钱了', num)
+          // 触发相反状态
+          toggle() {
+            this.isShow = !this.isShow
           }
         }
       })
