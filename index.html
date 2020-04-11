@@ -17,7 +17,7 @@
   <body>
     <div id="root">
       <!-- 定义要传递的值：title -->
-      <navbar title="home" :is-how="false"></navbar>
+      <navbar title="home" :is-show="false"></navbar>
       <navbar title="列表" :is-show="true"></navbar>
       <navbar title="购物车" :is-show="true"></navbar>
       <navbar :title="parentName"></navbar>
@@ -34,8 +34,17 @@
             </div>
           `
         ,
-        // 接收父组件传递的属性
-        props: ['title', 'isShow']
+        // 接收父组件传递的属性（无法进行属性验证）
+        // props: ['title', 'isShow']
+
+        // 属性验证，指定传递参数的类型
+        /*
+          可验证的类型：Number、String、Boolean、Array、Object、Function、null（不限制类型）
+         */
+        props: {
+          title: String,
+          isShow: Boolean
+        }
       })
 
       let vm = new Vue({
