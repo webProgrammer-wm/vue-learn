@@ -7,6 +7,7 @@
         <style>
             * {
                 list-style: none;
+                /*margin: 0;*/
             }
             .pink {
                 background: pink;
@@ -19,28 +20,34 @@
     </head>
     <body>
         <div id="root">
-            <!-- .lazy：当输入框失去焦点后再改变text的值 -->
-            <input type="text" v-model.lazy="text">
-            {{ text }}
-
-            <input type="number" placeholder="请输入年龄" v-model.number="number">
-            {{ number }}
-
-            <!-- .trim：去除首尾空格 -->
-            <input type="text" v-model.trim="username">
-            -{{ username }}-
+            <button @click="getMovie">获取当前热映电影</button>
+            <ul>
+                <li v-for="data in dataList">
+                    <img :src="data.images.small" alt="图片加载失败">
+                    <h3>{{ data.title }}</h3>
+                </li>
+            </ul>
         </div>
 
         <script type="text/javascript">
+            // 第一个 .then 拿到的是 请求头信息
+            // 第二个拿到的才是真正的数据
+            // fetch("./api/movie.json").then(res => res.json()).then(res => {
+            //     console.log(res)
+            // })
+
             let vm = new Vue({
                 el: '#root',
                 data: {
-                    text: '',
-                    number: '',
-                    username: ''
+                    dataList: []
                 },
                 methods: {
+                    getMovie() {
+                        fetch("./api/movie.json").then(res => res.json()).then(res => {
+                            this.dataList = res.subjects
+                        })
 
+                    }
                 }
             })
         </script>
