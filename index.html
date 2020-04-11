@@ -16,31 +16,48 @@
   </head>
   <body>
     <div id="root">
-      <input type="text" ref="mytext">
-      <button @click="handleAdd">add</button>
-
-      <child ref="mychild"></child>
+      <wx-author></wx-author>
+      <wx-user></wx-user>
     </div>
 
     <script type="text/javascript">
+      // 1.创建空vue实例 就是中央事件总线
+      let bus = new Vue()
+
       // 子组件
-      Vue.component('child', {
+      Vue.component('wxAuthor', {
         template:
           `
-            <div>
-              child
+            <div style="background: red;">
+              我是一个微信公众号作者
+              <input type="text" ref="mycontent"/>
+              <button @click="send()">发布</button>
             </div>
           `
         ,
-        data() {
-          return {
-            childName: '我是子组件'
-          }
-        },
         methods: {
-          say(word) {
-            console.log('子组件的方法', word)
+          send() {
+            // 2.向总线触发 wxMessage 自定义事件，并且传参
+            bus.$emit('wxMessage', this.$refs.mycontent.value)
           }
+        }
+      })
+
+      Vue.component('wxUser', {
+        // 3.合适的位置先订阅好 bus.$on
+        template:
+          `
+            <div style="background: pink;">
+              我只是一个微信用户
+            </div>
+          `
+        ,
+        mounted() {
+          // 4.接收 wxMessage 自定义事件，并且接收参数
+          bus.$on('wxMessage', (data) => {
+            console.log('收到推送了', data)
+          })
+          console.log('生命周期函数-当前组件的DOM，创建完成之后就会调用')
         }
       })
 
@@ -50,12 +67,6 @@
           isShow: true
         },
         methods: {
-          handleAdd() {
-            // 直接访问子组件的属性
-            console.log('111', this.$refs.mychild.childName)
-            // 直接访问子组件的方法、传值给子组件
-            console.log(this.$refs.mychild.say('孩子听话'))
-          }
         }
       })
 
