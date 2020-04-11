@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <title></title>
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <style>
             * {
                 list-style: none;
@@ -30,11 +31,6 @@
         </div>
 
         <script type="text/javascript">
-            // 第一个 .then 拿到的是 请求头信息
-            // 第二个拿到的才是真正的数据
-            // fetch("./api/movie.json").then(res => res.json()).then(res => {
-            //     console.log(res)
-            // })
 
             let vm = new Vue({
                 el: '#root',
@@ -43,10 +39,13 @@
                 },
                 methods: {
                     getMovie() {
-                        fetch("./api/movie.json").then(res => res.json()).then(res => {
-                            this.dataList = res.subjects
+                        axios.get('./api/movie.json').then(res => {
+                            console.log(res)
+                            // 自动包装 data 属性
+                            this.dataList = res.data.subjects
+                        }).catch(err => {
+                            console.log(err)
                         })
-
                     }
                 }
             })
