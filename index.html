@@ -16,59 +16,45 @@
   </head>
   <body>
     <div id="root">
-      <!-- 保留状态，避免重新渲染 -->
-      <keep-alive>
-        <!-- 通过组件名判断 当前展示哪个组件 -->
-        <component :is="who"></component>
-      </keep-alive>
-      <footer>
-        <ul>
-          <li>
-            <a @click="who = 'home'">首页</a>
-          </li>
-          <li>
-            <a @click="who = 'list'">列表页</a>
-          </li>
-          <li>
-            <a @click="who = 'cart'">购物车</a>
-          </li>
-        </ul>
-      </footer>
+      <child>
+        <div>aaa</div>
+      </child>
+
+      <swiper>
+        <div v-for="data in imgList">
+          <div>{{ data }}</div>
+        </div>
+      </swiper>
     </div>
 
     <script type="text/javascript">
+      Vue.component('child', {
+        template:
+          `
+            <div>
+              child
+              <slot></slot>
+            </div>
+          `
+      })
+
+      Vue.component('swiper', {
+        template:
+          `
+            <ul>
+              <slot></slot>
+            </ul>
+          `
+      })
 
       let vm = new Vue({
         el: '#root',
         data: {
-          who: 'home'
+          who: 'home',
+          imgList: ['图片1', '图片2', '图片3']
         },
         methods: {
         },
-        components: {
-          'home': {
-            template:
-              `
-                <div>
-                  home
-                  <input type="text">
-                </div>
-
-              `
-          },
-          'list': {
-            template:
-              `
-                <div>list</div>
-              `
-          },
-          'cart': {
-            template:
-              `
-                <div>cart</div>
-              `
-          }
-        }
       })
     </script>
   </body>
