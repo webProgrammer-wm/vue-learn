@@ -16,44 +16,42 @@
   </head>
   <body>
     <div id="root">
-      <child>
-        <div>aaa</div>
-      </child>
+      <navbar>
+        <!-- 子组件里的插槽内容 能访问 父组件的作用域 -->
+        <button @click="isShow = !isShow">navbar-button</button>
+      </navbar>
 
-      <swiper>
-        <div v-for="data in imgList">
-          <div>{{ data }}</div>
-        </div>
-      </swiper>
+      <sidebar v-show="isShow"></sidebar>
     </div>
 
     <script type="text/javascript">
-      Vue.component('child', {
+      Vue.component('navbar', {
         template:
           `
             <div>
-              child
+              navbar
               <slot></slot>
             </div>
           `
       })
 
-      Vue.component('swiper', {
+      Vue.component('sidebar', {
         template:
           `
-            <ul>
-              <slot></slot>
-            </ul>
+            <div>
+              <ul>
+                <li>1</li>
+                <li>2</li>
+                <li>3</li>
+              </ul>
+            </div>
           `
       })
 
       let vm = new Vue({
         el: '#root',
         data: {
-          who: 'home',
-          imgList: ['图片1', '图片2', '图片3']
-        },
-        methods: {
+          isShow: false
         },
       })
     </script>
