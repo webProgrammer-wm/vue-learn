@@ -16,64 +16,60 @@
   </head>
   <body>
     <div id="root">
-      <wx-author></wx-author>
-      <wx-user></wx-user>
+      <!-- 保留状态，避免重新渲染 -->
+      <keep-alive>
+        <!-- 通过组件名判断 当前展示哪个组件 -->
+        <component :is="who"></component>
+      </keep-alive>
+      <footer>
+        <ul>
+          <li>
+            <a @click="who = 'home'">首页</a>
+          </li>
+          <li>
+            <a @click="who = 'list'">列表页</a>
+          </li>
+          <li>
+            <a @click="who = 'cart'">购物车</a>
+          </li>
+        </ul>
+      </footer>
     </div>
 
     <script type="text/javascript">
-      // 1.创建空vue实例 就是中央事件总线
-      let bus = new Vue()
-
-      // 子组件
-      Vue.component('wxAuthor', {
-        template:
-          `
-            <div style="background: red;">
-              我是一个微信公众号作者
-              <input type="text" ref="mycontent"/>
-              <button @click="send()">发布</button>
-            </div>
-          `
-        ,
-        methods: {
-          send() {
-            // 2.向总线触发 wxMessage 自定义事件，并且传参
-            bus.$emit('wxMessage', this.$refs.mycontent.value)
-          }
-        }
-      })
-
-      Vue.component('wxUser', {
-        // 3.合适的位置先订阅好 bus.$on
-        template:
-          `
-            <div style="background: pink;">
-              我只是一个微信用户
-            </div>
-          `
-        ,
-        mounted() {
-          // 4.接收 wxMessage 自定义事件，并且接收参数
-          bus.$on('wxMessage', (data) => {
-            console.log('收到推送了', data)
-          })
-          console.log('生命周期函数-当前组件的DOM，创建完成之后就会调用')
-        }
-      })
 
       let vm = new Vue({
         el: '#root',
         data: {
-          isShow: true
+          who: 'home'
         },
         methods: {
+        },
+        components: {
+          'home': {
+            template:
+              `
+                <div>
+                  home
+                  <input type="text">
+                </div>
+
+              `
+          },
+          'list': {
+            template:
+              `
+                <div>list</div>
+              `
+          },
+          'cart': {
+            template:
+              `
+                <div>cart</div>
+              `
+          }
         }
       })
-
-      /*
-        1.ref放在标签上，拿到的是原生节点
-        2.ref放在组件上，拿到的是组件对象
-       */
     </script>
   </body>
 </html>
