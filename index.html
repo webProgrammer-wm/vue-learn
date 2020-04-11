@@ -23,11 +23,13 @@
     <script type="text/javascript">
       // 1.全局定义组件（作用域隔离）
       Vue.component('navBar', {
+        // 组件必须要有一个根节点
         template:
           `
             <div style="background: pink;">
               <button @click="handleBack()">返回</button>
               navbar
+              {{ name }}
               <button>主页</button>
               <child></child>
               <navbar-child></navbar-child>
@@ -38,6 +40,12 @@
         methods: {
           handleBack() {
             console.log('back')
+          }
+        },
+        // 组件与实例的区别 - data 的写法
+        data() {
+          return {
+            name: 'jialuo'
           }
         },
         // 局部定义组件-只能在它的父组件使用
