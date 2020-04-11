@@ -5,6 +5,9 @@
         <title></title>
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
         <style>
+            * {
+                list-style: none;
+            }
             .pink {
                 background: pink;
             }
@@ -16,44 +19,60 @@
     </head>
     <body>
         <div id="root">
-            <!-- 双向数据绑定 -->
-            <input type="text" v-model="text">
-            <div>{{ text }}</div>
-            <textarea v-model="text"></textarea>
-            <!-- 单选绑定 -->
-            <input type="checkbox" v-model="isChecked">记住用户名
+            <ul>
+                <li v-for="data in dataList">
+                    <input type="checkbox" v-model="checkGroup" :value="data">
+                    商品名称：{{ data.name }}
+                    价格：{{ data.price }}元
+                    数量：{{ data.number }}个
+                </li>
+            </ul>
 
-            <p>
-                你喜欢的运动？
-                <!--
-                     多选绑定 所有爱好都存在一个数组里，
-                     注意区分 value 值，value 是作为存在数组里的数据
-                 -->
-                <input type="checkbox" v-model="checkGroup" value="游泳">游泳
-                <input type="checkbox" v-model="checkGroup" value="滑冰">滑冰
-                <input type="checkbox" v-model="checkGroup" value="长跑">长跑
-            </p>
-
-            <p>
-                你最喜欢的编程语言？
-                <!--
-                     单选绑定 把勾选的赋值给一个变量，
-                     注意区分 value 值，value 是作为变量里的值
-                 -->
-                <input type="radio" v-model="picked" value="PHP">PHP
-                <input type="radio" v-model="picked" value="JavaScript">JavaScript
-                <input type="radio" v-model="picked" value="Java">Java
-            </p>
+            <p>总金额：{{ getPrice() }} 元</p>
         </div>
 
         <script type="text/javascript">
             let vm = new Vue({
                 el: '#root',
                 data: {
-                    text: '',
-                    isChecked: false,
+                    // 选中的商品列表
                     checkGroup: [],
-                    picked: ''
+                    dataList: [
+                        {
+                            name: '商品1',
+                            price: 10,
+                            number: 1,
+                            id: '1'
+                        },
+                        {
+                            name: '商品2',
+                            price: 20,
+                            number: 2,
+                            id: '2'
+                        },
+                        {
+                            name: '商品3',
+                            price: 30,
+                            number: 3,
+                            id: '3'
+                        }
+                    ]
+                },
+                methods: {
+                    getPrice() {
+                        let price = 0
+
+                        // for (let i = 0, length = this.checkGroup.length; i < length; i ++) {
+                        //     price += this.checkGroup[i].price * this.checkGroup[i].number
+                        // }
+
+                        this.checkGroup.forEach(item => {
+                            price += item.price * item.number
+                        })
+
+
+                        return price
+                    }
                 }
             })
         </script>
