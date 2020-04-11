@@ -1,18 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
     <head>
         <meta charset="utf-8">
         <title></title>
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
         <style>
-            * {
-                list-style: none;
-                /*margin: 0;*/
-            }
             .pink {
                 background: pink;
             }
-
             .red {
                 background: red;
             }
@@ -20,44 +15,33 @@
     </head>
     <body>
         <div id="root">
-            计算属性：{{ getName }}
-            普通方法：{{ getNameMethod() }}
-
-            <div>
-                另外一个地方
-                计算属性：{{ getName }}
-                普通方法：{{ getNameMethod() }}
-            </div>
+            <input type="text" v-model="content">
+            <ul>
+                <li v-for="data in getSearchList">
+                    {{ data }}
+                </li>
+            </ul>
         </div>
 
         <script type="text/javascript">
             let vm = new Vue({
                 el: '#root',
                 data: {
-                    name: 'xiaoming'
+                    // 输入的内容
+                    content: '',
+                    dataList: ['111', '123', '222', '333']
                 },
-                // 计算属性
                 computed: {
-                    // 依赖的状态改变了，计算属性会重新计算一遍
-                    getName() {
-                        console.log('computed')
-                        return this.name.substring(0, 1).toUpperCase() + this.name.substring(1)
-                    }
-                },
-                methods: {
-                    getNameMethod() {
-                        console.log('method')
-                        return this.name.substring(0, 1).toUpperCase() + this.name.substring(1)
+                    // 计算属性依赖的值发生改变，那么计算属性就会执行一遍
+                    // 因为输入的内容发生改变，所以计算属性会跟着执行一遍
+                    getSearchList() {
+                        /*
+                            如果 indexOf 检查的字符串长度为0，那么返回的就是0，这样的话，如果不输入搜索内容，那么会把原数组完整返回
+                            如果查询到了内容，就返回一个带有查询内容的新数组
+                         */
+                        return this.dataList.filter(item => item.indexOf(this.content) > -1)
                     }
                 }
-
-                /*
-                    计算属性相对方法性能更好
-                    以上的两个地方用到了计算属性和方法
-                    计算属性只被调用了一次，被计算过一次的话会缓存在内存中
-                    而方法被调用了两次
-
-                 */
             })
         </script>
     </body>
