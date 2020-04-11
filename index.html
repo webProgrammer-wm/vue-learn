@@ -1,50 +1,68 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title></title>
-        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-        <style>
-            .pink {
-                background: pink;
-            }
-            .red {
-                background: red;
-            }
-        </style>
-    </head>
-    <body>
-        <div id="root">
-            <nav-bar></nav-bar>
-            <nav-bar></nav-bar>
-            <nav-bar></nav-bar>
-        </div>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+      .pink {
+        background: pink;
+      }
 
-        <script type="text/javascript">
-            // 1.全局定义组件（作用域隔离）
-            Vue.component('navBar', {
-                template:
-                  `<div style="background: pink;">
-                      <button @click="handleBack()">返回</button>
-                      navbar
-                      <button>主页</button>
-                   </div>`
-                ,
-                // 组件的方法
-                methods: {
-                    handleBack() {
-                        console.log(1)
-                    }
-                }
+      .red {
+        background: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <nav-bar></nav-bar>
+      <side-bar></side-bar>
+    </div>
 
-            })
+    <script type="text/javascript">
+      // 1.全局定义组件（作用域隔离）
+      Vue.component('navBar', {
+        template:
+          `
+            <div style="background: pink;">
+              <button @click="handleBack()">返回</button>
+              navbar
+              <button>主页</button>
+              <child></child>
+              <navbar-child></navbar-child>
+            </div>
+          `
+        ,
+        // 组件的方法
+        methods: {
+          handleBack() {
+            console.log('back')
+          }
+        },
+        // 局部定义组件-只能在它的父组件使用
+        components: {
+          navbarChild: {
+            template: `<div>navbarChild</div>`
+          }
+        }
+
+      })
+
+      Vue.component('child', {
+        template:
+          `<div>child组件-全局定义</div>`
+      })
+
+      Vue.component('sideBar', {
+        template:
+          `<div>sidebar</div>`
+      })
 
 
-            let vm = new Vue({
-                el: '#root',
-                data: {
-                }
-            })
-        </script>
-    </body>
+      let vm = new Vue({
+        el: '#root'
+      })
+    </script>
+  </body>
 </html>
