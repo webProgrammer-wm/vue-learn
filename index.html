@@ -5,58 +5,56 @@
     <title></title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <style>
-      .pink {
-        background: pink;
+      .fade-enter-active,
+      .fade-leave-active {
+        transition: all .5s;
       }
 
-      .red {
-        background: red;
+      .fade-enter,
+      .fade-leave-to {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+
+      .bounce-enter-active {
+        animation: bounce-in .5s;
+      }
+
+      .bounce-leave-active {
+        animation: bounce-in .5s reverse;
+      }
+
+      @keyframes bounce-in {
+        0% {
+          opacity: 0;
+          transform: translateX(100px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateX(0px);
+        }
       }
     </style>
   </head>
   <body>
     <div id="root">
-      <child>
-        <!-- 指定插槽名字为 a -->
-        <div slot="a">aaaaaaaaaaaa</div>
-        <div slot="b">bbbbbbbbbbbb</div>
-      </child>
+      <button @click="isShow = !isShow">Toggle</button>
 
-      <swiper>
-        <li v-for="data in dataList">
-          {{ data }}
-        </li>
-      </swiper>
+      <transition name="fade">
+        <div v-show="isShow">元素</div>
+      </transition>
+
+      <transition name="bounce">
+        <div v-show="isShow">元素</div>
+      </transition>
     </div>
 
     <script type="text/javascript">
-      Vue.component('child', {
-        // 具名插槽：具有名字的插槽，指定插入位置
-        template:
-          `
-            <div>
-              <slot name="a"></slot>
-              child
-              <slot name="b"></slot>
-            </div>
-          `
-      })
-
-      Vue.component('swiper', {
-        template:
-          `
-            <div>
-              <ul>
-                <slot></slot>
-              </ul>
-            </div>
-          `
-      })
 
       let vm = new Vue({
         el: '#root',
         data: {
-          dataList: ['11111', '22222', '33333']
+          isShow: true
         },
       })
     </script>
