@@ -6,11 +6,11 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <style>
       .bounce-enter-active {
-        animation: bounce-in .5s;
+        animation: bounce-in .2s;
       }
 
       .bounce-leave-active {
-        animation: bounce-in .5s reverse;
+        animation: bounce-in .2s reverse;
       }
 
       @keyframes bounce-in {
@@ -28,27 +28,18 @@
   </head>
   <body>
     <div id="root">
-      <!-- 保留状态，避免重新渲染 -->
-      <keep-alive>
-        <!-- 组件动画 -->
-        <transition name="bounce" mode="out-in">
-          <!-- 通过组件名判断 当前展示哪个组件 -->
-          <component :is="who"></component>
-        </transition>
-      </keep-alive>
-      <footer>
-        <ul>
-          <li>
-            <a @click="who = 'home'">首页</a>
+      <input type="text" v-model="text"> {{ text }}
+      <button @click="addItem">add</button>
+
+      <!--<ul>-->
+        <transition-group tag="ul" name="bounce">
+          <!-- 必须提供唯一的 key 值 -->
+          <li v-for="(data, index) in dataList" :key="data">
+            {{ data }}
+            <button @click="del(index)">del</button>
           </li>
-          <li>
-            <a @click="who = 'list'">列表页</a>
-          </li>
-          <li>
-            <a @click="who = 'cart'">购物车</a>
-          </li>
-        </ul>
-      </footer>
+        </transition-group>
+      <!--</ul>-->
     </div>
 
     <script type="text/javascript">
@@ -56,33 +47,19 @@
       let vm = new Vue({
         el: '#root',
         data: {
-          who: 'home'
+          dataList: [],
+          text: ''
         },
         methods: {
-        },
-        components: {
-          'home': {
-            template:
-              `
-                <div>
-                  home
-                  <input type="text">
-                </div>
-              `
+          addItem() {
+            this.dataList.push(this.text)
+            this.text = ''
           },
-          'list': {
-            template:
-              `
-                <div>list</div>
-              `
-          },
-          'cart': {
-            template:
-              `
-                <div>cart</div>
-              `
+          del(index) {
+            this.dataList.splice(index, 1)
           }
-        }
+        },
+
       })
     </script>
   </body>
