@@ -5,60 +5,77 @@
     <title></title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <style>
-      .bounce-enter-active {
-        animation: bounce-in .2s;
-      }
-
-      .bounce-leave-active {
-        animation: bounce-in .2s reverse;
-      }
-
-      @keyframes bounce-in {
-        0% {
-          transform: translateX(100px);
-          opacity: 0;
-        }
-
-        100% {
-          transform: translateX(0px);
-          opacity: 1;
-        }
-       }
     </style>
   </head>
   <body>
     <div id="root">
-      <input type="text" v-model="text"> {{ text }}
-      <button @click="addItem">add</button>
-
-      <!--<ul>-->
-        <transition-group tag="ul" name="bounce">
-          <!-- 必须提供唯一的 key 值 -->
-          <li v-for="(data, index) in dataList" :key="data">
-            {{ data }}
-            <button @click="del(index)">del</button>
-          </li>
-        </transition-group>
-      <!--</ul>-->
+      <child></child>
+      <!-- 从dom里删除掉这个节点意味着销毁了组件 -->
+      <child v-if="created">测试Destroy</child>
+      <button @click="created = !created">Change</button>
     </div>
 
     <script type="text/javascript">
+      Vue.component('child', {
+        template:
+          `
+            <div>
+              child - {{ str }}
+              <button @click="str += 1">更新</button>
+
+            </div>
+          `
+        ,
+        data() {
+          return {
+            str: 1,
+            created: true
+          }
+        },
+        beforeCreate() {
+          console.log('beforeCreate')
+        },
+        created() {
+          console.log('created')
+        },
+
+        // 实例挂载前触发
+        beforeMount() {
+          console.log('beforeMount')
+        },
+        // 实例挂载完成触发
+        mounted() {
+          console.log('mounted 访问DOM，setInterval，window.onscroll，监听事件，ajax')
+        },
+
+        // 虚拟Dom 发生改变前触发
+        beforeUpdate() {
+          console.log('beforeUpdate')
+        },
+        // 虚拟Dom 发生改变触发
+        updated() {
+          console.log('updated 更新之后可以访问DOM')
+        },
+
+        // 销毁组件前触发
+        beforeDestroy() {
+          console.log('beforeDestory-clearInterval, window.onscroll=null.$off')
+        },
+        // 销毁组件后触发
+        destroyed() {
+          console.log('destroyed-clearInterval, window.onscroll=null.$off')
+        }
+      })
+
 
       let vm = new Vue({
         el: '#root',
         data: {
-          dataList: [],
-          text: ''
+          created: true
         },
         methods: {
-          addItem() {
-            this.dataList.push(this.text)
-            this.text = ''
-          },
-          del(index) {
-            this.dataList.splice(index, 1)
-          }
         },
+
 
       })
     </script>
