@@ -5,42 +5,52 @@
     <meta name="referrer" content="never">
     <title></title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <!--<link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">-->
-    <!--<script src="https://unpkg.com/swiper/js/swiper.min.js"> </script>-->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
+    <script src="https://unpkg.com/swiper/js/swiper.min.js"> </script>
     <!--<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>-->
     <style>
     </style>
   </head>
   <body>
     <div id="root">
-      <!-- 使用自定义指令 -->
-      <div v-bg="'red'">111</div>
-      <div v-bg="'pink'">222</div>
-      <div v-bg="myColor">222</div>
+      <div class="swiper-container a">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" v-for="(data, index) in list" v-swiper="{
+            index: index,
+            length: list.length
+          }">
+            {{ data }}
+          </div>
+        </div>
+        <!-- 如果需要分页器 -->
+        <div class="swiper-pagination"></div>
+      </div>
+
     </div>
 
     <script type="text/javascript">
-      // 自定义指令
-      Vue.directive('bg', {
-        // 指令-生命周期
-        // 插入
+      Vue.directive('swiper', {
         inserted(el, bind) {
-          // el 是指使用了该指令的 DOM元素
-          // console.log('当前节点插入到父组件中了')
-          console.log(bind)
-          el.style.background = bind.value
-        },
-        // 每次修改状态将会触发
-        update(el, bind) {
-          // 指令 - 生命周期 - 更新
-          el.style.background = bind.value
+          if (bind.value.index === bind.value.length - 1) {
+            new Swiper('.a', {
+              loop: true,
+              pagination: {
+                el: '.swiper-pagination'
+              }
+            })
+          }
         }
       })
 
       let vm = new Vue({
         el: '#root',
         data: {
-          myColor: 'red'
+          list: []
+        },
+        mounted() {
+          setTimeout(() => {
+            this.list = [111, 222, 333]
+          }, 2000)
         }
       })
 
