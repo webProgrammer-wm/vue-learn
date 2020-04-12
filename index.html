@@ -40,12 +40,18 @@
     <div id="root">
       <button @click="isShow = !isShow">Toggle</button>
 
-      <transition name="fade">
-        <div v-show="isShow">元素</div>
+      <!-- mode 代表的是动画执行顺序 -->
+      <transition name="fade" mode="in-out">
+        <!-- 因为Vue中的递归算法，对于同标签的情况，只会更改内容而不会增删节点 -->
+        <!-- 所以，如果要使用多元素动画的话，必须使用不同标签 -->
+        <!-- 或者使用不同key值，Vue对于不同key值，也不会做缓存处理 -->
+        <div v-if="isShow" key="1">元素</div>
+        <div v-else key="2">111</div>
+
       </transition>
 
       <transition name="bounce">
-        <div v-show="isShow">元素</div>
+        <!--<div v-show="isShow">元素</div>-->
       </transition>
     </div>
 
