@@ -16,33 +16,38 @@
   </head>
   <body>
     <div id="root">
-      <navbar>
-        <!-- 子组件里的插槽内容 能访问 父组件的作用域 -->
-        <button @click="isShow = !isShow">navbar-button</button>
-      </navbar>
+      <child>
+        <!-- 指定插槽名字为 a -->
+        <div slot="a">aaaaaaaaaaaa</div>
+        <div slot="b">bbbbbbbbbbbb</div>
+      </child>
 
-      <sidebar v-show="isShow"></sidebar>
+      <swiper>
+        <li v-for="data in dataList">
+          {{ data }}
+        </li>
+      </swiper>
     </div>
 
     <script type="text/javascript">
-      Vue.component('navbar', {
+      Vue.component('child', {
+        // 具名插槽：具有名字的插槽，指定插入位置
         template:
           `
             <div>
-              navbar
-              <slot></slot>
+              <slot name="a"></slot>
+              child
+              <slot name="b"></slot>
             </div>
           `
       })
 
-      Vue.component('sidebar', {
+      Vue.component('swiper', {
         template:
           `
             <div>
               <ul>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
+                <slot></slot>
               </ul>
             </div>
           `
@@ -51,7 +56,7 @@
       let vm = new Vue({
         el: '#root',
         data: {
-          isShow: false
+          dataList: ['11111', '22222', '33333']
         },
       })
     </script>
