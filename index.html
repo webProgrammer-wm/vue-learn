@@ -5,23 +5,23 @@
     <meta name="referrer" content="never">
     <title></title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
+    <script src="https://unpkg.com/swiper/js/swiper.min.js"> </script>
+    <!--<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>-->
     <style>
     </style>
   </head>
   <body>
     <div id="root">
-      <ul>
-        <li v-for="item in movieList">
-          {{ item.nm }}
-          <!--
-              vue会对代码进行解析，
-              把 item.img 当做参数传给 changePath 这个自定义过滤器上，
-              让过滤器对这个字符进行处理
-          -->
-          <img :src="item.img | changePath" alt="">
-        </li>
-      </ul>
+      <div class="swiper-container a">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" v-for="data in dataList">
+            {{ data }}
+          </div>
+        </div>
+        <!-- 如果需要分页器 -->
+        <div class="swiper-pagination"></div>
+      </div>
     </div>
 
     <script type="text/javascript">
@@ -29,31 +29,35 @@
       let vm = new Vue({
         el: '#root',
         data: {
-          movieList: []
+          dataList: []
         },
         methods: {
         },
         mounted() {
-          axios.get('./api/movie.json').then(res => {
-            this.movieList = res.data.coming
-          })
+          setTimeout(() => {
+            // 状态改完未必是 Dom生成完了
+            this.dataList = ['111', '222', '333'] // 状态改完，异步更新DOM
+            console.log(document.querySelectorAll('.swiper-slide').length)
+
+            // swiper 初始化过早问题
+            // new Swiper('.a', {
+            //   loop: true,
+            //   pagination: {
+            //     el: '.swiper-pagination'
+            //   }
+            // })
+
+          }, 2000)
         },
-        // 过滤器
-        filters: {
-          changePath(path) {
-            return path.replace('w.h', '120.180')
-          }
-        }
-
-        // 拿到的图片路径
-        // http://p0.meituan.net/w.h/movie/644b66958ccbeb8bac4955c52864c8881471793.jpg
-
-        // 正常的图片路径          后端提供接口处理图片分辨率 120 * 180
-        // http://p0.meituan.net/120.180/movie/644b66958ccbeb8bac4955c52864c8881471793.jpg
-
-        // 可以使用过滤器对路径进行修改
-
-
+        // 等待虚拟DOM更新完成后，再初始化Swiper
+        // updated() {
+        //   new Swiper('.a', {
+        //     loop: true,
+        //     pagination: {
+        //       el: '.swiper-pagination',
+        //     }
+        //   })
+        // }
       })
     </script>
   </body>
