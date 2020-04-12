@@ -2,79 +2,56 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="referrer" content="never">
     <title></title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
     </style>
   </head>
   <body>
     <div id="root">
-      <child></child>
-      <!-- 从dom里删除掉这个节点意味着销毁了组件 -->
-      <child v-if="created">测试Destroy</child>
-      <button @click="created = !created">Change</button>
+      <ul>
+        <li v-for="item in movieList">
+          {{ item.nm }}
+          <!--
+              vue会对代码进行解析，
+              把 item.img 当做参数传给 changePath 这个自定义过滤器上，
+              让过滤器对这个字符进行处理
+          -->
+          <img :src="item.img | changePath" alt="">
+        </li>
+      </ul>
     </div>
 
     <script type="text/javascript">
-      Vue.component('child', {
-        template:
-          `
-            <div>
-              child - {{ str }}
-              <button @click="str += 1">更新</button>
-
-            </div>
-          `
-        ,
-        data() {
-          return {
-            str: 1,
-            created: true
-          }
-        },
-        beforeCreate() {
-          console.log('beforeCreate')
-        },
-        created() {
-          console.log('created')
-        },
-
-        // 实例挂载前触发
-        beforeMount() {
-          console.log('beforeMount')
-        },
-        // 实例挂载完成触发
-        mounted() {
-          console.log('mounted 访问DOM，setInterval，window.onscroll，监听事件，ajax')
-        },
-
-        // 虚拟Dom 发生改变前触发
-        beforeUpdate() {
-          console.log('beforeUpdate')
-        },
-        // 虚拟Dom 发生改变触发
-        updated() {
-          console.log('updated 更新之后可以访问DOM')
-        },
-
-        // 销毁组件前触发
-        beforeDestroy() {
-          console.log('beforeDestory-clearInterval, window.onscroll=null.$off')
-        },
-        // 销毁组件后触发
-        destroyed() {
-          console.log('destroyed-clearInterval, window.onscroll=null.$off')
-        }
-      })
-
 
       let vm = new Vue({
         el: '#root',
         data: {
-          created: true
+          movieList: []
         },
         methods: {
         },
+        mounted() {
+          axios.get('./api/movie.json').then(res => {
+            this.movieList = res.data.coming
+          })
+        },
+        // 过滤器
+        filters: {
+          changePath(path) {
+            return path.replace('w.h', '120.180')
+          }
+        }
+
+        // 拿到的图片路径
+        // http://p0.meituan.net/w.h/movie/644b66958ccbeb8bac4955c52864c8881471793.jpg
+
+        // 正常的图片路径          后端提供接口处理图片分辨率 120 * 180
+        // http://p0.meituan.net/120.180/movie/644b66958ccbeb8bac4955c52864c8881471793.jpg
+
+        // 可以使用过滤器对路径进行修改
 
 
       })
