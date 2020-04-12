@@ -5,17 +5,6 @@
     <title></title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <style>
-      .fade-enter-active,
-      .fade-leave-active {
-        transition: all .5s;
-      }
-
-      .fade-enter,
-      .fade-leave-to {
-        opacity: 0;
-        transform: translateX(100px);
-      }
-
       .bounce-enter-active {
         animation: bounce-in .5s;
       }
@@ -26,33 +15,40 @@
 
       @keyframes bounce-in {
         0% {
-          opacity: 0;
           transform: translateX(100px);
+          opacity: 0;
         }
+
         100% {
-          opacity: 1;
           transform: translateX(0px);
+          opacity: 1;
         }
-      }
+       }
     </style>
   </head>
   <body>
     <div id="root">
-      <button @click="isShow = !isShow">Toggle</button>
-
-      <!-- mode 代表的是动画执行顺序 -->
-      <transition name="fade" mode="in-out">
-        <!-- 因为Vue中的递归算法，对于同标签的情况，只会更改内容而不会增删节点 -->
-        <!-- 所以，如果要使用多元素动画的话，必须使用不同标签 -->
-        <!-- 或者使用不同key值，Vue对于不同key值，也不会做缓存处理 -->
-        <div v-if="isShow" key="1">元素</div>
-        <div v-else key="2">111</div>
-
-      </transition>
-
-      <transition name="bounce">
-        <!--<div v-show="isShow">元素</div>-->
-      </transition>
+      <!-- 保留状态，避免重新渲染 -->
+      <keep-alive>
+        <!-- 组件动画 -->
+        <transition name="bounce" mode="out-in">
+          <!-- 通过组件名判断 当前展示哪个组件 -->
+          <component :is="who"></component>
+        </transition>
+      </keep-alive>
+      <footer>
+        <ul>
+          <li>
+            <a @click="who = 'home'">首页</a>
+          </li>
+          <li>
+            <a @click="who = 'list'">列表页</a>
+          </li>
+          <li>
+            <a @click="who = 'cart'">购物车</a>
+          </li>
+        </ul>
+      </footer>
     </div>
 
     <script type="text/javascript">
@@ -60,8 +56,33 @@
       let vm = new Vue({
         el: '#root',
         data: {
-          isShow: true
+          who: 'home'
         },
+        methods: {
+        },
+        components: {
+          'home': {
+            template:
+              `
+                <div>
+                  home
+                  <input type="text">
+                </div>
+              `
+          },
+          'list': {
+            template:
+              `
+                <div>list</div>
+              `
+          },
+          'cart': {
+            template:
+              `
+                <div>cart</div>
+              `
+          }
+        }
       })
     </script>
   </body>
