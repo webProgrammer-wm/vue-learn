@@ -5,69 +5,45 @@
     <meta name="referrer" content="never">
     <title></title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
-    <script src="https://unpkg.com/swiper/js/swiper.min.js"> </script>
+    <!--<link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">-->
+    <!--<script src="https://unpkg.com/swiper/js/swiper.min.js"> </script>-->
     <!--<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>-->
     <style>
     </style>
   </head>
   <body>
     <div id="root">
-      <!--
-        因为图片数据是异步获取，刚开始 length 是 0，做一遍初始化，
-        当数据填充到列表的时候，再做一次初始化
-        如果不设置key值，递归算法会拿上次的缓存，所以设置 key值为 图片数组的 长度
-       -->
-      <swiper :key="dataList.length">
-        <div class="swiper-slide" v-for="data in dataList">
-          {{ data }}
-        </div>
-      </swiper>
+      <!-- 使用自定义指令 -->
+      <div v-bg="'red'">111</div>
+      <div v-bg="'pink'">222</div>
+      <div v-bg="myColor">222</div>
     </div>
 
     <script type="text/javascript">
-      Vue.component('swiper', {
-        template:
-          `
-            <div class="swiper-container a">
-              <div class="swiper-wrapper">
-                <slot></slot>
-              </div>
-              <div class="swiper-pagination"></div>
-            </div>
-          `
-        ,
-        mounted() {
-          new Swiper('.a', {
-            loop: true,
-            pagination: {
-              el: '.swiper-pagination'
-            }
-          })
+      // 自定义指令
+      Vue.directive('bg', {
+        // 指令-生命周期
+        // 插入
+        inserted(el, bind) {
+          // el 是指使用了该指令的 DOM元素
+          // console.log('当前节点插入到父组件中了')
+          console.log(bind)
+          el.style.background = bind.value
+        },
+        // 每次修改状态将会触发
+        update(el, bind) {
+          // 指令 - 生命周期 - 更新
+          el.style.background = bind.value
         }
-
       })
 
       let vm = new Vue({
         el: '#root',
         data: {
-          dataList: []
-        },
-        mounted() {
-          setTimeout(() => {
-            this.dataList = [111, 222, 333]
-          }, 1000)
+          myColor: 'red'
         }
       })
 
-
-      /*
-        解决的问题：swiper到底在何时初始化？
-        思路：因为图片数据是异步获取，刚开始 length 是 0，做一遍初始化，
-             当数据填充到列表的时候，再做一次初始化
-             如果不设置key值，递归算法会拿上次的缓存，所以设置 key值为 图片数组的 长度
-
-       */
     </script>
   </body>
 </html>
